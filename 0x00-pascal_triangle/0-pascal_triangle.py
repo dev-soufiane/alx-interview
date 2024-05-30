@@ -27,6 +27,7 @@ def pascal_triangle(n):
 
     return triangle
 
+
 def print_triangle(triangle):
     """
     Prints the Pascal's triangle.
@@ -37,6 +38,7 @@ def print_triangle(triangle):
     for row in triangle:
         print("[{}]".format(",".join(map(str, row))))
 
-# Example usage
+
 if __name__ == "__main__":
+
     print_triangle(pascal_triangle(5))
