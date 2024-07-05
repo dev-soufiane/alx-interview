@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
-N queens puzzle solver
+N queens problem
 """
 
 import sys
@@ -8,17 +8,16 @@ import sys
 
 def safe_position(board, row, col):
     """
-    Check if it's safe to place a queen at the given position (row, col)
-    on the chessboard.
+    Check safety for placing queen at (row, col) on board.
     """
     board_size = len(board)
 
-    # Check if there's a queen in the same row to the left
+    # Check row horizontally
     for c in range(col):
         if board[row][c] == 1:
             return False
 
-    # Check upper diagonal on the left side
+    # Check upper diagonal left
     r, c = row, col
     while r >= 0 and c >= 0:
         if board[r][c] == 1:
@@ -26,7 +25,7 @@ def safe_position(board, row, col):
         r -= 1
         c -= 1
 
-    # Check lower diagonal on the left side
+    # Check lower diagonal left
     r, c = row, col
     while r < board_size and c >= 0:
         if board[r][c] == 1:
@@ -37,22 +36,22 @@ def safe_position(board, row, col):
     return True
 
 
-def solve_nqueens(board, col, solutions):
+def SolveNqueens(board, col, solutions):
     """
-    Recursively solve the N Queens problem by
-    placing queens column by column
+    Recursively solve NQueens problem column-wise.
 
     Args:
-        board (list): The current state of the chessboard.
-        col (int): The current column being considered.
-        solutions (list): List to store the found solutions.
+        board (list): Current board state.
+        col (int): Current column to place queen.
+        solutions (list): List to store found solutions.
 
     Returns:
-        bool: True if a solution is found, otherwise False.
+        bool: True if solution found, else False.
     """
     board_size = len(board)
 
     if col == board_size:
+        # Found solution, convert board to coordinates and add to solutions
         solution = []
         for r in range(board_size):
             for c in range(board_size):
@@ -64,25 +63,23 @@ def solve_nqueens(board, col, solutions):
     found = False
     for r in range(board_size):
         if safe_position(board, r, col):
-            # Place a queen at the current position
+            # Place queen and recurse
             board[r][col] = 1
-            # Recur for the next column
-            found = solve_nqueens(board, col + 1, solutions) or found
-            # Backtrack and remove the queen from the current position
+            found = SolveNqueens(board, col + 1, solutions) or found
+            # Backtrack
             board[r][col] = 0
 
     return found
 
 
-def nqueens(n):
+def NQueens(n):
     """
-    Solve the N Queens problem and print all solutions.
+    Solve and print all solutions for N Queens problem.
 
     Args:
-        n (int): The size of the chessboard and the number of queens.
+        n (int): Size of chessboard and number of queens.
 
-    Returns:
-        None
+    Returns: None
     """
     if not isinstance(n, int):
         print("N must be a number")
@@ -93,7 +90,7 @@ def nqueens(n):
 
     board = [[0] * n for _ in range(n)]
     solutions = []
-    solve_nqueens(board, 0, solutions)
+    SolveNqueens(board, 0, solutions)
 
     for solution in solutions:
         print(solution)
@@ -106,7 +103,7 @@ if __name__ == "__main__":
 
     try:
         n = int(sys.argv[1])
-        nqueens(n)
+        NQueens(n)
     except ValueError:
         print("N must be a number")
         sys.exit(1)
