@@ -1,39 +1,36 @@
-#!/usr/bin/env node
+#!/usr/bin/node
+// Script to print all characters of a Star Wars movie
 
 const request = require('request');
+const filmId = process.argv[2]; // Retrieve movie ID from command line argument
 
-// Retrieve movie ID from command line argument
-const movieId = process.argv[2];
-
-// Define the API URL for fetching movie data
 const apiUrl = {
-  url: 'https://swapi-api.alx-tools.com/api/films/' + movieId,
+  url: 'https://swapi-api.alx-tools.com/api/films/' + filmId,
   method: 'GET'
 };
 
-// Make a GET request to retrieve the movie data
+// Make a GET request to fetch the movie data
 request(apiUrl, function (error, response, body) {
   if (!error) {
-    // Parse the response body to extract character URLs
-    const characterUrls = JSON.parse(body).characters;
-    // Start printing character names
-    printCharacterNames(characterUrls, 0);
+    // Extract characters from the movie data
+    const characters = JSON.parse(body).characters;
+    printCharacterNames(characters, 0); // Initiate printing of character names
   }
 });
 
-// Recursive function to print the characters' names
-function printCharacterNames(urls, index) {
+// Recursive function to print characters' names
+function printCharacterNames(characters, index) {
   // Make a GET request for each character URL
-  const characterUrl = urls[index];
+  const characterUrl = characters[index];
   request(characterUrl, function (error, response, body) {
     if (!error) {
-      // Parse character data JSON to extract character's name
+      // Extract character's name from the response data
       const characterData = JSON.parse(body);
       console.log(characterData.name);
-      // Check if there are more character URLs to fetch and print
-      if (index + 1 < urls.length) {
-        // Recursively print names of subsequent characters
-        printCharacterNames(urls, index + 1);
+      // Check if there are more characters to print
+      if (index + 1 < characters.length) {
+        // Recursively print with the next character index
+        printCharacterNames(characters, index + 1);
       }
     }
   });
